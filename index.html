@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="FLAIR introduces a variational sampling framework with flow-matching objectives for accurate and data-consistent inverse problem solving..">
+  <meta name="keywords" content="FLAIR, Inverse Problems, Flow Matching, SD3, Variational Posterior Sampling">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://inverseFLAIR.github.io/">
+  <title>Solving Inverse Problems with FLAIR</title>
+
+
+  <meta property="og:title" content="Solving Inverse Problems with FLAIR">
+  <meta property="og:description" content="FLAIR is a variational posterior sampling framework using flow matching models.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://inverseFLAIR.github.io/">
+  <meta property="og:image" content="https://inverseFLAIR.github.io/static/imgs/teaser3.svg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Solving Inverse Problems with FLAIR">
+  <meta name="twitter:description" content="FLAIR is a variational posterior sampling framework using flow matching models.">
+  <meta name="twitter:image" content="https://inverseFLAIR.github.io/static/imgs/teaser3.svg">
+
+
+
+
+  <!-- Google tag (gtag.js) -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESZM8CZ1BH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ESZM8CZ1BH');
+  </script>
+  -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/twentytwenty.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/fire.svg"> -->
+
+
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery.event.move.js"></script>
+  <script src="./js/jquery.twentytwenty.js"></script>
+  <script src="./js/bulma-carousel.min.js"></script>
+  <script src="./js/bulma-slider.min.js"></script>
+  <script src="./js/fontawesome.all.min.js"></script>
+
+  <!--MathJax-->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 is-size-3-mobile publication-title">Solving Inverse Problems with FLAIR</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=ZLY6D_QAAAAJ&hl=de">Julius Erbach</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=tFx8AhkAAAAJ&hl=en">Dominik Narnhofer</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="">Andreas Dombos</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/people/bernt-schiele">Bernt Schiele</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://geometric-rl.mpi-inf.mpg.de/">Jan Eric Lenssen</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.ch/citations?user=FZuNgqIAAAAJ&hl=en">Konrad Schindler</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors footer-section">
+            <span class="author-block-footer"><sup>1</sup>Photogrammetry and Remote Sensing, ETH Zurich, Switzerland</span>
+            <span class="author-block-footer"><sup>2</sup>Max Planck Institute for Informatics, Saarland Informatics Campus, Germany</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!--<span class="link-block">
+                <a href="static/pdf/paper.pdf" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>-->
+              <span class="link-block">
+                <a href="XXX" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="XXX" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Hugging Face Space -->
+              <span class="link-block">
+                <a href="XXX" target="_blank" rel="noopener noreferrer"
+                    class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                    &#129303;
+                </span>
+                <span>Demo</span>
+                </a>
+                </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="method_train" width="100%" src="./static/imgs/teaser3.svg" alt="Overview of the FLAIR method."/>
+      <h2 class="subtitle has-text-centered">
+          <span class="dnerf">FLAIR</span> is the first framework to combine flow based models with variational posterior sampling.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!--
+<section class="section pt-0 pb-4">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Continuously sampled super resolution</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-narrow">
+        <div class="interpolation-panel
+                    is-flex
+                    is-align-items-center
+                    p-4"
+             style="border-radius: 10px; background-color: #f5f5f5;">
+          <div class="has-text-centered mr-4"> style="width: 100%;"
+                 alt="Interpolate start reference image." />
+            <p>Input Image</p>
+          </div>
+          <div>
+            <div id="interpolation-image-wrapper">Loading...</div>
+            <p id="scale-info" class="has-text-centered has-text-info"></p>
+            <input class="slider is-large is-info"
+                   id="interpolation-slider"
+                   step="1" min="0" max="100" value="0" type="range">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+
+
+<section class="section pt-0 pb-4">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths" >
+        <h2 class="title is-3 is-spaced">Qualitative Samples</h2>
+        <span class="dnerf">First row:</span> Comparison between observation and FLAIR based reconstruction<br>
+        <span class="dnerf">Second row:</span> Comparison between a FlowDPS (competitor) FLAIR based reconstruction.
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small mt-4" id="gallery">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel-horizontal" class="carousel results-carousel">
+
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/input/0005.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/result/5.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/flowdps/0005.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/result/5.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/input/70.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/result/70.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/flowdps/70.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/samples/result/70.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/Observation_108.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FLAIR_108.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FlowDPS_108.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FLAIR_108.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/Observation_15.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FLAIR_15.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FlowDPS_15.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FLAIR_15.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/Observation_353.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FLAIR_353.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FlowDPS_353.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FLAIR_353.png">
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/Observation_473.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FLAIR_473.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FlowDPS_473.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_SR12/FLAIR_473.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/Observation_51.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_51.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FlowDPS_51.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_51.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/Observation_634.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FLAIR_634.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FlowDPS_634.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FLAIR_634.png">
+            </div>
+          </div>
+        </div>
+
+       
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/Observation_691.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FLAIR_691.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FlowDPS_691.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_inpaint/FLAIR_691.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/Observation_8.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FLAIR_8.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FlowDPS_8.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_mb/FLAIR_8.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/Observation_3.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_3.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FlowDPS_3.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_3.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/Observation_590.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FLAIR_590.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FlowDPS_590.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_Div2k_inpainting/FLAIR_590.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="twoitem">
+          <div class="twentytwenty-container twentytwenty-container-top">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/Observation_511.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_511.png">
+            </div>
+          </div>
+          <div class="twentytwenty-container twentytwenty-container-bot  disable-crop">
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FlowDPS_511.png">
+            </div>
+            <div class="cmpcontent">
+              <img src="/static/paper_figs/example_images/additional_samples_FFHQ_SR12/FLAIR_511.png">
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths"  style="width: 100%;">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            <!-- FLAIR introduces a variational posterior sampling framework that approximates the posterior flow based on a learned velocity field \( v_\theta(x_t, t) \), guiding samples along a probabilistic trajectory between noise and data. It enforces hard data consistency (HDC) via an explicit likelihood term and calibrates the regularizer with timestep-dependent weights (CRW) reflecting the model's accuracy. To mitigate low prior density issues in under-conditioned settings, FLAIR introduces a trajectory adjustment (DTA) by reparameterizing the variational distribution to interpolate between the posterior mean and a velocity-predicted endpoint, enhancing stability and consistency of the sampled trajectories. -->
+            FLAIR introduces a variational sampling framework that replaces score-based regularization with a flow-matching objective based on a learned velocity field \( v_\theta(x_t, t) \). The objective minimizes
+            \[
+            \mathbb{E}_{q(x_0|y)} \left[ \frac{\|y - f(\mu_x)\|^2}{2\sigma_\nu^2} \right] + \int_0^T \lambda_{\mathcal{R}}(t) \mathbb{E}_{q(x_t|y)} \left[ \|v_\theta(x_t, t) - u_t(x_t | \epsilon)\|^2 \right] dt,
+            \]
+            where \( q(x_t|y) = \mathcal{N}((1 - t)\mu_x, t^2 I) \) and \( u_t \) defines the posterior velocity field. 
+            To mitigate low prior density issues in under-conditioned settings, FLAIR introduces a trajectory adjustment (DTA) by reparameterizing the variational distribution to interpolate between the posterior mean and a velocity-predicted starting point:
+            \[
+            q(x_t|y) = \mathcal{N}\left((1 - t)\mu_x + t\alpha \hat{x}_1,\; t^2(1 - \alpha^2) I\right).
+            \]
+            ,effectively guiding the sample toward its expected location on the learned manifold.
+            Additionally, FLAIR enforces hard data consistency (HDC) via an explicit likelihood term and calibrates the regularizer with timestep-dependent weights \( \lambda_{\mathcal{R}}(t) \) (CRW) reflecting the model's accuracy      
+          </p>
+          <p>
+            <img id="method_train" width="100%" src="./static/paper_figs/ablation_fig.svg" alt="FLAIR method" style="margin-top: 2em; margin-bottom: 2em;"" />
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Paper results. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths" style="width: 100%;">
+        <h2 class="title is-3">Quantitative comparison</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our experiments clearly demonstrate that FLAIR outperforms existing flow-based approaches in terms of all perceptual metrics, as can be seen in the Table below.
+          </p>
+          <div class="publication-results">
+            <img id="method_train" width="100%" src="./static/table.svg" alt="FLAIR results scheme"/>
+          </div>
+      </div>
+    </div>
+    <!--/ Paper results. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths"  style="width: 100%;">
+        <h2 class="title is-3">Editing</h2>
+        <div class="content has-text-justified">
+          <p>
+            In addition to image restoration, our method demonstrates strong performance in text-based image editing, simply by providing appropriate target prompts during inpainting.
+          </p>
+          <p>
+            <img id="method_train" width="100%" src="./static/imgs/julius.svg" alt="FLAIR method" style="margin-top: 2em; margin-bottom: 2em;" />
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  $(window).on('load', function() {
+    bulmaCarousel.attach('#results-carousel-horizontal', {
+      slidesToScroll: 1,
+      slidesToShow: 3,
+      loop: true,
+      infinite: true,
+      autoplay: true,
+      autoplaySpeed: 10000
+    });
+
+    /*bulmaCarousel.attach('#results-carousel-vertical', {
+      slidesToScroll: 1,
+      slidesToShow: 5,
+      loop: true,
+      autoplay: false,
+    });*/
+
+    $(".twentytwenty-container-top").twentytwenty({
+      before_label: 'Observed',
+      after_label: 'Ours',
+      default_offset_pct: 0.7,
+    });
+
+    $(".twentytwenty-container-bot").twentytwenty({
+      before_label: 'FlowDPS',
+      after_label: 'Ours',
+      default_offset_pct: 0.5,
+    });
+
+    // $(".twentytwenty-container-bottom").twentytwenty({
+    //   before_label: 'FlowDPS',
+    //   after_label: 'Ours',
+    //   default_offset_pct: 0.5,
+    // });
+
+    $('.results-carousel').css({
+      'max-height': '1500px',
+      'visibility': 'visible'
+    });
+  });
+</script>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Citation</h2>
+    <p>If our work contributed to your research, a citation would be greatly appreciated:</p>
+    <pre><code>@article{er2025solving,
+      title={Solving Inverse Problems with FLAIR},
+      author={Erbach, Julius and Narnhofer, Dominik, and Dombos Andreas, and Jan Eric Lenssen, and Bernd Schiele and Schindler, Konrad},
+      journal={arXiv},
+      year={2025}
+    }</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

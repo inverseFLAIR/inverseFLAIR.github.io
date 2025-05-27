@@ -1,0 +1,25 @@
+\begin{table}[ht]
+  \centering
+  \caption{\textbf{Ablation study} for $\times$12 super-resolution on DIV2K and FFHQ. Model components are individually switched on or off.} % to assess their influence on reconstruction quality, measured in terms of LPIPS and PSNR.
+  \label{tab:ablation}
+  \begin{tabular}{ccc|cc|cc}
+    \toprule
+    HDC & DTA & CRW & \multicolumn{2}{c|}{FFHQ} & \multicolumn{2}{c}{DIV2K} \\
+    & & & LPIPS ↓ & PSNR ↑ & LPIPS ↓ &  PSNR ↑\\
+    \midrule
+    \cmark & \cmark & \cmark & 0.259 & 27.45 & 0.427 & 21.05     \\
+    \xmark & \cmark & \cmark & 0.297 & 27.17 & 0.467 & 20.82    \\ %28.00 & 0.276 (1 step in table 3step in comment)
+    \cmark & \xmark & \cmark & 0.432 & 27.20 & 0.622 & 21.69    \\
+    \cmark & \cmark & \xmark & 0.363 & 28.58 & 0.583 & 21.98    \\
+    \xmark & \xmark & \xmark & 0.392 & 28.33 & 0.605 & 21.99    \\
+    \bottomrule
+  \end{tabular}
+  \vspace{1ex}
+  \parbox{\linewidth}{\small
+    \textbf{Legend.}
+    HDC: Hard Data Consistency; 
+    DTA: Deterministic Trajectory Adjustment;\\
+    CRW: Calibrated Regularizer Weight.
+    \cmark{} = included, \xmark{} = ablated.
+  }
+\end{table}

@@ -1,0 +1,28 @@
+\begin{table*}[htbp]
+  \centering
+  \caption{Quantitative results with 50 NFE and $\sigma_{\nu}=0.01$. We compare our version with data-specific captions and a version without captions.}
+  \vspace{0.5em}
+  \label{tab:wo_captions}
+
+  \resizebox{\linewidth}{!}{%
+    \begin{tabular}{@{}l
+                    r r r r |
+                    r r r r @{}}
+      \toprule
+      & \multicolumn{4}{c|}{FFHQ}
+      & \multicolumn{4}{c}{DIV2K} \\
+      Method
+      & \small LPIPS$\downarrow$ & \small FID$\downarrow$ & \small SSIM$\uparrow$ & PSNR$\uparrow$
+      & \small LPIPS$\downarrow$ & \small FID$\downarrow$ & \small SSIM$\uparrow$ & PSNR$\uparrow$ \\
+      \midrule
+      wo captions
+      & 0.278 & 17.0 & 0.734 & 27.66
+      & 0.488 & 51.5 & \textbf{0.546} & \textbf{21.82} \\
+      \rowcolor{myrowcolour}
+      \textbf{Ours}
+      & \textbf{0.271} & \textbf{16.2} & \textbf{0.740} & \textbf{27.71}
+      & \textbf{0.421} & \textbf{32.1} & 0.525 & 21.39 \\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{table*}

@@ -1,0 +1,89 @@
+\begin{table*}[htbp]
+  \centering
+  \small
+  \caption{Quantitative results with 50~NFE and $\nu=0.01$.}
+  \label{tab:restoration_results}
+
+  %––––– column and number settings –––––
+  \sisetup{
+    detect-all,
+    round-mode        = places,
+    round-precision   = 3,
+    table-align-text-post = false
+  }
+
+  %––––– table –––––
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{
+      @{}l
+      *{16}{S}  % 16 numeric columns handled by siunitx
+      @{}
+    }
+      \toprule
+      \multicolumn{17}{c}{\textbf{FFHQ 768$\times$768}}\\
+      \midrule
+      & \multicolumn{4}{c}{SR $\times$8}
+      & \multicolumn{4}{c}{SR $\times$12}
+      & \multicolumn{4}{c}{Motion Deblurring}
+      & \multicolumn{4}{c}{Inpainting}\\
+      \cmidrule(lr){2-5}\cmidrule(lr){6-9}
+      \cmidrule(lr){10-13}\cmidrule(lr){14-17}
+      Method
+      & {PSNR$\uparrow$} & {SSIM$\uparrow$} & {LPIPS$\downarrow$} & {pFID$\downarrow$}
+      & {PSNR$\uparrow$} & {SSIM$\uparrow$} & {LPIPS$\downarrow$} & {pFID$\downarrow$}
+      & {PSNR$\uparrow$} & {SSIM$\uparrow$} & {LPIPS$\downarrow$} & {pFID$\downarrow$}
+      & {PSNR$\uparrow$} & {SSIM$\uparrow$} & {LPIPS$\downarrow$} & {pFID$\downarrow$}\\
+      \midrule
+      ReSample
+      & \multicolumn{4}{c}{--} & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--} & \multicolumn{4}{c}{--}\\
+      FlowDPS
+      & 28.416 & 0.773 & 0.357 & 29.428
+      & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--}\\
+      PSLD
+      & 10.554 & 0.510 & 0.878 & 137.214
+      & 10.682 & 0.492 & 0.866 & 115.402
+      & 10.386 & 0.528 & 0.890 & 189.345
+      & \multicolumn{4}{c}{--}\\
+      FlowChef
+      & 27.444 & 0.803 & 0.408 & 112.216
+      & 26.165 & 0.772 & 0.481 & 119.069
+      & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--}\\
+      Ours
+      & 28.834 & 0.782 & 0.288 & 18.709
+      & 28.085 & 0.759 & 0.282 & 22.256
+      & 25.172 & 0.714 & 0.371 & 27.193
+      & 23.282 & 0.824 & 0.189 & 10.692\\
+      \midrule
+      \multicolumn{17}{c}{\textbf{DIV2K 768$\times$768}}\\
+      \midrule
+      ReSample
+      & \multicolumn{4}{c}{--} & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--} & \multicolumn{4}{c}{--}\\
+      FlowDPS
+      & 23.070 & 0.605 & 0.457 & 77.790
+      & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--}
+      & \multicolumn{4}{c}{--}\\
+      PSLD
+      & 10.442 & 0.351 & 0.906 & 161.129
+      & 10.506 & 0.339 & 0.886 & 138.413
+      & 10.334 & 0.364 & 0.936 & 231.295
+      & \multicolumn{4}{c}{--}\\
+      FlowChef
+      & 22.211 & 0.599 & 0.552 & 121.583
+      & 20.983 & 0.545 & 0.647 & 139.863
+      & 20.945 & 0.540 & 0.691 & 154.321
+      & \multicolumn{4}{c}{--}\\
+      Ours
+      & 23.257 & 0.610 & 0.463 & 37.619
+      & 21.611 & 0.545 & 0.504 & 39.760
+      & 23.736 & 0.623 & 0.369 & 36.824
+      & 22.299 & 0.225 & 0.758 & 14.532\\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{table*}

@@ -1,0 +1,120 @@
+
+\newcommand{\commentout}[1]{}
+\begingroup
+\setlength{\tabcolsep}{3pt}
+    \begin{table*}[htbp]
+      \centering
+      % \small
+      \caption{\textbf{Quantitative results} with 50~NFE and $\sigma_{\nu} = 0.01$.}
+      \vspace{0.5em}
+      \label{tab:restoration_results}
+    
+      %––––– global siunitx settings (nothing here forces extra rounding) –––––
+      \sisetup{
+        detect-all,
+        round-mode        = places,
+        table-align-text-post = false
+      }
+      
+    
+      %––––– table –––––
+      \resizebox{\linewidth}{!}{%
+        \begin{tabular}{
+          @{}l
+          % 16 numeric columns:  (LPIPS) (FID) (SSIM) (PSNR) × 4 task blocks
+          S[table-format=1.3, round-precision=3]  % 2 int + 2 dec  – LPIPS
+          S[table-format=2.1, round-precision=1]  % 1 int + 3 dec  – FID
+          S[table-format=1.3, round-precision=3]  % 1 int + 3 dec  – SSIM
+          S[table-format=2.2, round-precision=2]|  % 2 int + 2 dec  – PSNR
+          S[table-format=1.3, round-precision=3]  % 2 int + 2 dec  – LPIPS
+          S[table-format=2.1, round-precision=1]  % 1 int + 3 dec  – FID
+          S[table-format=1.3, round-precision=3]  % 1 int + 3 dec  – SSIM
+          S[table-format=2.2, round-precision=2]|  % 2 int + 2 dec  – PSNR
+          S[table-format=1.3, round-precision=3]  % 2 int + 2 dec  – LPIPS
+          S[table-format=2.1, round-precision=1]  % 1 int + 3 dec  – FID
+          S[table-format=1.3, round-precision=3]  % 1 int + 3 dec  – SSIM
+          S[table-format=2.2, round-precision=2]|  % 2 int + 2 dec  – PSNR
+          S[table-format=1.3, round-precision=3]  % 2 int + 2 dec  – LPIPS
+          S[table-format=2.1, round-precision=1]  % 1 int + 3 dec  – FID
+          S[table-format=1.3, round-precision=3]  % 1 int + 3 dec  – SSIM
+          S[table-format=2.2, round-precision=2]|  % 2 int + 2 dec  – PSNR
+          @{}
+        }
+          \toprule
+          & \multicolumn{4}{c|}{SR $\times$8}
+          & \multicolumn{4}{c|}{SR $\times$12}
+          & \multicolumn{4}{c|}{Motion Deblurring}
+          & \multicolumn{4}{c}{Inpainting}\\
+          %\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+          %\cmidrule(lr){10-13}\cmidrule(lr){14-17}
+          %\specialrule{1.pt}{0pt}{0pt}
+          \midrule
+          
+          Method
+          & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+          & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+          & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+          & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}\\
+          \toprule
+          \multicolumn{17}{c}{\textbf{FFHQ 768$\times$768}}\\
+          \midrule
+          ReSample
+          & 0.4003311097621918 & 55.58622741699219 & \bfseries0.8146893978118896 & 26.36746597290039
+          & 0.4735182523727417 & 80.26885986328125 & \bfseries 0.7855629920959473 & 25.469425201416016
+          & 0.4574111998081207 & 82.89214324951172 & \bfseries 0.7877886891365051 & 25.446083068847656
+          & 0.36591094732284546 & 70.83206939697266 & \underline{0.827} & 21.82782745361328 \\
+          FlowDPS
+           & 0.37437254190444946 & 40.29948425292969 & 0.7563266158103943 & 29.238021850585938
+           & 0.41304320096969604 & 47.244354248046875 & 0.7412288188934326 & \underline{28.05}
+           & 0.4312819540500641 & 49.48529815673828 & 0.7316177487373352 & 27.63728141784668
+           & \underline{0.344} & \underline{38.3} & 0.7707209587097168 & 19.191648483276367 \\
+          RSD
+          & 0.39147356152534485 & 51.66742706298828 & 0.7760330438613892 & \bfseries29.690019607543945
+          & 0.46238717436790466 & 71.73455047607422 & \underline{0.743} & \bfseries 28.108963012695312
+          & 0.45782342553138733 & 77.31913757324219 & 0.7430248856544495 & \underline{27.67}
+          & 0.47828179597854614 & 73.29340362548828 & 0.7355696558952332 & \underline{21.97} \\
+          FlowChef
+          & \underline{0.341} & \underline{30.5} & 0.7600728869438171 & 28.424997329711914
+          & \underline{0.373} & \underline{41.0} & 0.7304214239120483 & 26.99635887145996
+          & \underline{0.406} &  \underline{35.0} & 0.7161194682121277 & 25.80912971496582
+          & 0.3941635489463806 & 71.04671478271484 & 0.7801031470298767 & 18.184221267700195 \\
+          \rowcolor{myrowcolour}
+          \textbf{Ours}
+          & \bfseries 0.2132353037595749 & \bfseries13.26621150970459 & \underline{0.777} & \underline{29.54}
+          & \bfseries0.27056485414505005 & \bfseries16.201229095458984 & 0.7402094602584839 & 27.714468002319336
+          & \bfseries0.23615501821041107 & \bfseries10.732836723327637 & \underline{0.772} & \bfseries 29.61139488220215
+          & \bfseries0.18383462727069855 & \bfseries8.74171257019043 & \bfseries 0.8277943730354309 & \bfseries 23.69305419921875 \\
+          \toprule
+          \multicolumn{17}{c}{\textbf{DIV2K 768$\times$768}}\\
+          \toprule
+          %\specialrule{1.pt}{0pt}{0pt}
+          ReSample
+          & 0.533 & 54.99737167358398 & \bfseries 0.625 & 22.34
+          & 0.6428295969963074 & 88.0516586303711 & \bfseries0.5615006685256958 & 20.85
+          & 0.5558531880378723 & 79.6540298461914 & \underline{0.617} & 21.79242706298828
+          & \underline{0.285} & 51.85907745361328 & \underline{0.796} & 22.676401138305664 \\
+          FlowDPS
+          & \underline{0.476} & 54.160160064697266 & 0.5673845410346985 & 23.00572967529297
+          & 0.5472385287284851 & 67.42438507080078 & \underline{0.528} & \underline{21.79}
+          & 0.5584609508514404 & 60.432220458984375 & 0.5359930396080017 & 21.877470016479492
+          & 0.3276353180408478 & \underline{34.2} & 0.6919097900390625 & 21.714540481567383 \\
+          RSD
+          & 0.538948655128479 & 60.93032455444336 & 0.5913122296333313 & \bfseries 23.44598960876465
+          & 0.683576822280883 & 95.72624969482422 & 0.5232758522033691 & \bfseries21.964975357055664
+          & 0.6376681327819824 & 97.64688873291016 & 0.5511103272438049 & \underline{22.10}
+          & 0.46377840638160706 & 63.870880126953125 & 0.6775234341621399 & \underline{23.23} \\
+          FlowChef
+          & 0.49032270908355713 & \underline{48.6} & 0.5394924283027649 & 21.8426456451416
+          & \underline{0.525} & \underline{55.3} & 0.4921541213989258 & 20.52199935913086
+          & \underline{0.561} &  \underline{51.3} & 0.48604729771614075 & 19.899375915527344
+          & 0.4888574182987213 & 86.28651428222656 & 0.6592622995376587 & 20.874286651611328 \\
+          \rowcolor{myrowcolour}
+          \textbf{Ours}
+          & \bfseries 0.3529984951019287 & \bfseries 26.456972122192383 & \underline{0.607} & \underline{23.30}
+          & \bfseries 0.42149055004119873 & \bfseries 32.1186637878418 & 0.525365948677063 & 21.385475158691406
+          & \bfseries 0.3145533800125122 & \bfseries 21.111848831176758 & \bfseries 0.6527808904647827 & \bfseries24.444496154785156
+          & \bfseries 0.16288119554519653 & \bfseries 11.026673316955566 & \bfseries 0.8146522045135498 & \bfseries23.75210189819336 \\
+          \bottomrule
+        \end{tabular}      }
+    \end{table*}
+\endgroup

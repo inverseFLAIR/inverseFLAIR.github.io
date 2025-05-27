@@ -1,0 +1,81 @@
+\begingroup
+\setlength{\tabcolsep}{3pt}
+\begin{table*}[htbp]
+  \centering
+  % \small
+  \caption{\textbf{Quantitative results} with 50 NFE and $\sigma_{\nu} = 0.01$. We compare different weighting functions $\lambda_{\mathcal{R}(t)}$ based on the model error}
+  \vspace{0.5em}
+  \label{tab:reg_shift}
+
+  %––––– global siunitx settings –––––
+  \sisetup{
+    detect-all,
+    round-mode        = places,
+    table-align-text-post = false
+  }
+
+  \resizebox{\linewidth}{!}{%
+    \begin{tabular}{
+      @{}l
+      % 16 numeric columns
+      S[table-format=1.3, round-precision=3]  % LPIPS
+      S[table-format=2.1, round-precision=1]  % FID
+      S[table-format=1.3, round-precision=3]  % SSIM
+      S[table-format=2.2, round-precision=2]| % PSNR
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.1, round-precision=1]
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.2, round-precision=2]|
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.1, round-precision=1]
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.2, round-precision=2]|
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.1, round-precision=1]
+      S[table-format=1.3, round-precision=3]
+      S[table-format=2.2, round-precision=2]@
+    }
+      \toprule
+      & \multicolumn{4}{c|}{SR $\times$8}
+      & \multicolumn{4}{c|}{SR $\times$12}
+      & \multicolumn{4}{c|}{Motion Deblurring}
+      & \multicolumn{4}{c}{Inpainting}\\
+      \midrule
+      Method
+      & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+      & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+      & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}
+      & {\small LPIPS$\downarrow$} & {\small FID$\downarrow$} & {\small SSIM$\uparrow$} & {PSNR$\uparrow$}\\
+      \toprule
+      \multicolumn{17}{c}{\textbf{FFHQ 768$\times$768}}\\
+      \midrule
+      $\lambda_{shift}$
+      & 0.246 & 27.4 & \bfseries 0.793 & \bfseries 29.91
+      & 0.286 & 24.4 & \bfseries 0.766 & \bfseries 28.19
+      & 0.237 & 14.5 & \bfseries 0.790 & \bfseries 29.84
+      & \bfseries 0.180 & \bfseries 8.2 & \bfseries 0.828 & 23.58 \\
+      \rowcolor{myrowcolour}
+      \textbf{Ours}
+      & \bfseries 0.2132353037595749 & \bfseries 13.26621150970459 & 0.777 & 29.54
+      & \bfseries 0.27056485414505005 & \bfseries 16.201229095458984 & 0.7402094602584839 & 27.714468002319336
+      & \bfseries 0.23615501821041107 & \bfseries 10.732836723327637 & 0.772 & 29.61139488220215
+      & 0.18383462727069855 & 8.74171257019043 & 0.8277943730354309 & \bfseries 23.69305419921875 \\
+      \toprule
+      \multicolumn{17}{c}{\textbf{DIV2K 768$\times$768}}\\
+      \toprule
+      $\lambda_{shift}$
+      & 0.379 & 30.4 & \bfseries 0.625 & \bfseries 23.58
+      & 0.434 & 37.5 & 0.522 & \bfseries 21.40
+      & 0.337 & 25.8 & \bfseries 0.664 & \bfseries 24.54
+      & \bfseries 0.151 & \bfseries 9.0 & \bfseries 0.819 & \bfseries 23.79 \\
+      \rowcolor{myrowcolour}
+      \textbf{Ours}
+      & \bfseries 0.3529984951019287 & \bfseries 26.456972122192383 & 0.607 & 23.30
+      & \bfseries 0.42149055004119873 & \bfseries 32.1186637878418 & \bfseries 0.525365948677063 & 21.385475158691406
+      & \bfseries 0.3145533800125122 & \bfseries 21.111848831176758 & 0.6527808904647827 & 24.444496154785156
+      & 0.16288119554519653 & 11.026673316955566 & 0.8146522045135498 & 23.75210189819336 \\
+      \bottomrule
+    \end{tabular}%
+  }
+\end{table*}
+\endgroup

@@ -17,8 +17,13 @@ body {
 }
 
 .teaser .hero-body {
-    padding-top: 0;
+    padding-top: 3rem; /* add space above Overview */
     padding-bottom: 3rem;
+}
+
+/* Nudge the space between the Overview title and the figure */
+.teaser .hero-body .title.is-spaced {
+    margin-bottom: 0.75rem;
 }
 
 .teaser {

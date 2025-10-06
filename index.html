@@ -88,7 +88,13 @@
     </div>
   </nav>
 
-  <section class="hero">
+  <section class="hero video-hero">
+    <div class="video-hero__container">
+      <video class="video-hero__media" autoplay muted loop playsinline preload="metadata"
+        poster="./static/imgs/teaser3.svg"
+        src="./dune_matrix_teaser_inpainting.mp4" aria-hidden="true"></video>
+      <div class="video-hero__overlay" aria-hidden="true"></div>
+    </div>
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
@@ -104,6 +110,7 @@
               <span class="author-block">
                 <a href="">Andreas Dombos</a><sup>1</sup>,
               </span>
+              <br class="author-break">
               <span class="author-block">
                 <a
                   href="https://www.mpi-inf.mpg.de/departments/computer-vision-and-machine-learning/people/bernt-schiele">Bernt
@@ -579,6 +586,12 @@
               simply by providing appropriate target prompts during inpainting.
               Edited images shown alongside original, with prompts: "A high resolution portrait of a..."
             </p>
+            <div class="has-text-centered" style="margin-top: 2em;">
+              <video controls autoplay loop muted playsinline preload="metadata" style="width: 100%; height: auto;">
+                <source src="./dune_matrix_teaser_inpainting.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
             <p>
               <img id="method_train" width="100%" src="./static/imgs/julius.svg" alt="FLAIR method"
                 style="margin-top: 2em; margin-bottom: 2em;" />

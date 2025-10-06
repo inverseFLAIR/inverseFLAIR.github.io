@@ -79,7 +79,8 @@ body {
 .video-hero__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(6, 9, 18, .55) 0%, rgba(6, 9, 18, .75) 100%);
+    /* background: linear-gradient(180deg, rgba(6, 9, 18, .55) 0%, rgba(6, 9, 18, .75) 100%); */
+    background: rgba(0, 0, 0, 0.4);
     pointer-events: none;
     z-index: 2;
 }

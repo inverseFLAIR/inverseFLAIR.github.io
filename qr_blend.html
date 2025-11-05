@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>QR Preview — loading…</title>
+    <meta name="robots" content="noindex">
+    <style>
+        :root {
+            --bg: #000;
+            color: #fff
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial
+        }
+
+        .frame {
+            position: relative;
+            max-width: 900px;
+            width: 92vw;
+            height: 92vh;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .imgwrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .6)
+        }
+
+        .imgwrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: opacity 2s ease, filter 2s ease
+        }
+
+        /* FLAIR badge */
+        .badge {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.45);
+            color: #e6fff8;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 450ms ease, transform 450ms ease;
+            pointer-events: none;
+        }
+
+        .badge.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .badge svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+
+        .imgwrap img.top {
+            opacity: 1
+        }
+
+        .imgwrap img.hidden {
+            opacity: 0
+        }
+
+        .controls {
+            position: fixed;
+            left: 16px;
+            bottom: 16px;
+            background: rgba(0, 0, 0, .45);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px
+        }
+
+        .controls a {
+            color: #9fe;
+            text-decoration: none;
+            margin-left: 10px
+        }
+
+        .progress {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 18px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            width: 60%;
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #57e0ff, #9bffb8)
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0
+        }
+
+        @media (max-width:600px) {
+            .controls {
+                left: 8px;
+                right: 8px;
+                bottom: 8px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="frame" role="main">
+        <div class="imgwrap" aria-hidden="false">
+            <!-- Reconstruction is underneath -->
+            <img id="recon" src="static/qr_code_blend/reconstructed.webp" alt="Reconstruction" />
+            <!-- QR image on top -->
+            <img id="qr" class="top" src="static/qr_code_blend/qr_code.png" alt="QR code linking to site" />
+            <!-- badge shows when reconstruction is revealed -->
+            <div class="badge" id="flairBadge" aria-hidden="true">
+                <span>Reconstructed by FLAIR</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls" aria-hidden="false">
+        <span id="status">Preparing…</span>
+        <a id="skip" href="/index.html">Go to landing page</a>
+    </div>
+
+    <div class="progress" aria-hidden="true">
+        <div class="bar" id="bar"></div>
+    </div>
+
+    <p class="sr-only" id="timing">This page will show the QR, blend to the reconstruction, then forward to the landing
+        page.</p>
+
+    <script>
+        (function () {
+            // Configurable timings (ms)
+            var showQR = 1000;        // time to show QR before starting transition
+            var transition = 1500;    // crossfade duration (matches CSS)
+            var showRecon = 1500;     // time to show recon before redirect
+            var redirectTo = '/index.html';
+
+            var qr = document.getElementById('qr');
+            var recon = document.getElementById('recon');
+            var status = document.getElementById('status');
+            var skip = document.getElementById('skip');
+            var bar = document.getElementById('bar');
+
+            // Ensure both images are loaded before starting the animation
+            var toLoad = [qr.src, recon.src];
+            var loaded = 0;
+            function imageLoaded() { if (++loaded === toLoad.length) startSequence(); }
+            toLoad.forEach(function (src) {
+                var img = new Image(); img.onload = imageLoaded; img.onerror = imageLoaded; img.src = src;
+            });
+
+            // progress animation helper
+            function setProgress(p) { bar.style.width = Math.max(0, Math.min(100, p)) + '%'; }
+
+            function startSequence() {
+                status.textContent = 'Showing QR code';
+                setProgress(5);
+
+                // after showQR ms, start the crossfade
+                setTimeout(function () {
+                    status.textContent = 'Blending…';
+                    // start progress animation for transition duration + showRecon
+                    var total = transition + showRecon;
+                    var start = Date.now();
+                    var raf = null;
+                    function tick() {
+                        var t = Date.now() - start;
+                        setProgress(5 + 95 * Math.min(1, t / total));
+                        if (t < total) raf = requestAnimationFrame(tick);
+                    }
+                    tick();
+
+                    // trigger crossfade by hiding the top image
+                    qr.classList.add('hidden');
+                    qr.classList.remove('top');
+
+                    // show the FLAIR badge when reconstruction is revealed
+                    var badge = document.getElementById('flairBadge');
+                    if (badge) {
+                        badge.setAttribute('aria-hidden', 'false');
+                        // small delay so the badge transition feels synced with the crossfade
+                        setTimeout(function () { badge.classList.add('visible'); }, 120);
+                    }
+
+                    // after transition + showRecon, redirect
+                    setTimeout(function () {
+                        status.textContent = 'Opening site…';
+                        window.location.replace(redirectTo);
+                    }, total);
+                }, showQR);
+            }
+
+            // allow immediate skip
+            skip.addEventListener('click', function () {
+                // let link behave normally
+            });
+
+            // If user takes too long to load (edge case), start anyway after 3s
+            setTimeout(function () { if (loaded < toLoad.length) startSequence(); }, 3000);
+        })();
+    </script>
+</body>
+
+</html>

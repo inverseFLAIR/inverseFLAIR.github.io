@@ -188,19 +188,58 @@
             var status = document.getElementById('status');
             var skip = document.getElementById('skip');
             var bar = document.getElementById('bar');
+            var badge = document.getElementById('flairBadge');
+            var wrap = document.querySelector('.imgwrap');
 
             // Ensure both images are loaded before starting the animation
             var toLoad = [qr.src, recon.src];
             var loaded = 0;
-            function imageLoaded() { if (++loaded === toLoad.length) startSequence(); }
+            function imageLoaded() {
+                positionBadge();
+                if (++loaded === toLoad.length) startSequence();
+            }
             toLoad.forEach(function (src) {
                 var img = new Image(); img.onload = imageLoaded; img.onerror = imageLoaded; img.src = src;
             });
+
+            function badgePadding() {
+                var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                return Math.max(8, Math.min(16, vw * 0.02));
+            }
+
+            // Keep the badge anchored to the visible top-right corner of the image (not the container).
+            function positionBadge() {
+                if (!badge || !wrap) return;
+                var img = recon && recon.naturalWidth ? recon : qr;
+                if (!img || !img.naturalWidth || !img.naturalHeight) return;
+
+                var containerWidth = wrap.clientWidth;
+                var containerHeight = wrap.clientHeight;
+                var imgRatio = img.naturalWidth / img.naturalHeight;
+                var containerRatio = containerWidth / containerHeight;
+
+                var displayWidth, displayHeight;
+                if (containerRatio > imgRatio) {
+                    displayHeight = containerHeight;
+                    displayWidth = displayHeight * imgRatio;
+                } else {
+                    displayWidth = containerWidth;
+                    displayHeight = displayWidth / imgRatio;
+                }
+
+                var offsetX = (containerWidth - displayWidth) / 2;
+                var offsetY = (containerHeight - displayHeight) / 2;
+                var pad = badgePadding();
+
+                badge.style.top = (offsetY + pad) + 'px';
+                badge.style.right = (offsetX + pad) + 'px';
+            }
 
             // progress animation helper
             function setProgress(p) { bar.style.width = Math.max(0, Math.min(100, p)) + '%'; }
 
             function startSequence() {
+                positionBadge();
                 status.textContent = 'Showing QR code';
                 setProgress(5);
 
@@ -223,9 +262,9 @@
                     qr.classList.remove('top');
 
                     // show the FLAIR badge when reconstruction is revealed
-                    var badge = document.getElementById('flairBadge');
                     if (badge) {
                         badge.setAttribute('aria-hidden', 'false');
+                        positionBadge();
                         // small delay so the badge transition feels synced with the crossfade
                         setTimeout(function () { badge.classList.add('visible'); }, 120);
                     }
@@ -242,6 +281,8 @@
             skip.addEventListener('click', function () {
                 // let link behave normally
             });
+
+            window.addEventListener('resize', positionBadge);
 
             // If user takes too long to load (edge case), start anyway after 3s
             setTimeout(function () { if (loaded < toLoad.length) startSequence(); }, 3000);
